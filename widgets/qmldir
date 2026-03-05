@@ -1,0 +1,6 @@
+module widgets
+Clock 1.0 Clock.qml
+IpWidget 1.0 IpWidget.qml
+MemoryWidget 1.0 MemoryWidget.qml
+UpdatesWidget 1.0 UpdatesWidget.qml
+Workspaces 1.0 Workspaces.qml
