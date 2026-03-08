@@ -14,9 +14,9 @@ PanelWindow {
     screen: modelData
 
     anchors {
-        left:   true
-        right:  true
-        bottom: true
+        left:  true
+        right: true
+        top:   true
     }
 
     implicitHeight: 36
@@ -82,6 +82,26 @@ PanelWindow {
             spacing: 4
 
             UpdatesWidget {
+                height: root.height
+                theme:  theme
+            }
+
+            SoundWidget {
+                height: root.height
+                theme:  theme
+            }
+
+            NetworkWidget {
+                height: root.height
+                theme:  theme
+            }
+
+            BatteryWidget {
+                height: root.height
+                theme:  theme
+            }
+
+            PowerWidget {
                 height: root.height
                 theme:  theme
             }

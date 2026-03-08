@@ -3,6 +3,7 @@
 // Click opens the installer in a kitty terminal.
 
 import QtQuick
+import Quickshell
 import Quickshell.Io
 
 Item {
@@ -15,22 +16,16 @@ Item {
 
     property string _count: ""
     property string _class: "green"
+    property var    _packages: []
 
-    readonly property color _pillColor: {
-        if (_class === "red")    return theme.a(Qt.color("#e06060"), 0.18)
-        if (_class === "yellow") return theme.a(Qt.color("#e0b860"), 0.18)
-        return theme.a(theme.primary, 0.06)
-    }
-    readonly property color _borderColor: {
-        if (_class === "red")    return theme.a(Qt.color("#e06060"), 0.50)
-        if (_class === "yellow") return theme.a(Qt.color("#e0b860"), 0.45)
-        return theme.a(theme.primary, 0.14)
-    }
-    readonly property color _textColor: {
-        if (_class === "red")    return Qt.color("#e06060")
-        if (_class === "yellow") return Qt.color("#e0b860")
-        return theme.a(theme.primary, 0.90)
-    }
+    readonly property bool _alert: _class === "red" || _class === "yellow"
+
+    readonly property color _pillColor:
+        _alert ? theme.a(theme.accent, 0.12) : theme.a(theme.primary, 0.06)
+    readonly property color _borderColor:
+        _alert ? theme.a(theme.accent, 0.40) : theme.a(theme.primary, 0.14)
+    readonly property color _textColor:
+        _alert ? theme.accent : theme.a(theme.primary, 0.90)
 
     function refresh() {
         _count = ""
@@ -48,8 +43,9 @@ Item {
             if (!running && _buf !== "") {
                 try {
                     const j = JSON.parse(_buf.trim())
-                    _count = j.text  ?? ""
-                    _class = j.class ?? "green"
+                    _count    = j.text     ?? ""
+                    _class    = j.class    ?? "green"
+                    _packages = j.packages ?? []
                 } catch(e) {}
                 _buf = ""
             }
@@ -59,6 +55,7 @@ Item {
     Process {
         id: installer
         command: ["bash", "-c", "~/.config/ml4w/settings/installupdates.sh"]
+        onRunningChanged: if (!running) refresh()
     }
 
     Timer {
@@ -89,9 +86,9 @@ Item {
 
         Text {
             anchors.verticalCenter: parent.verticalCenter
-            text:           "\uf487"
+            text:           Icons.updates
             font.family:    "FiraCode Nerd Font Mono"
-            font.pixelSize: 18
+            font.pixelSize: Icons.updatesSize
             color:          _textColor
 
             Behavior on color { ColorAnimation { duration: 300 } }
@@ -112,6 +109,47 @@ Item {
     MouseArea {
         anchors.fill: parent
         cursorShape:  Qt.PointingHandCursor
+        hoverEnabled: true
         onClicked:    installer.running = true
+        onEntered:    tip.show()
+        onExited:     tip.hide()
+    }
+
+    TooltipContainer {
+        id:         tip
+        theme:      root.theme
+        targetItem: root
+
+        Column {
+            spacing: 2
+
+            Text {
+                text:           _packages.length + " pending update" + (_packages.length === 1 ? "" : "s")
+                color:          root._textColor
+                font.family:    "Fira Sans"
+                font.pixelSize: 12
+                font.weight:    Font.DemiBold
+                bottomPadding:  4
+            }
+
+            Repeater {
+                model: Math.min(root._packages.length, 20)
+                Text {
+                    text:           root._packages[index]
+                    color:          root.theme.a(root.theme.primary, 0.85)
+                    font.family:    "FiraCode Nerd Font Mono"
+                    font.pixelSize: 12
+                }
+            }
+
+            Text {
+                visible:        root._packages.length > 20
+                text:           "… and " + (root._packages.length - 20) + " more"
+                color:          root.theme.a(root.theme.primary, 0.5)
+                font.family:    "Fira Sans"
+                font.pixelSize: 11
+                topPadding:     2
+            }
+        }
     }
 }

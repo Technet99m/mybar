@@ -69,16 +69,25 @@ if [[ $(_checkCommandExists "pacman") == 0 ]]; then
     else
         aur_helper="yay"
     fi
-    updates_aur=$($aur_helper -Qum | wc -l)
-    updates_pacman=$(checkupdates | wc -l)
+    aur_list=$($aur_helper -Qum 2>/dev/null | awk '{print $1}')
+    pacman_list=$(checkupdates 2>/dev/null | awk '{print $1}')
+    updates_aur=$(echo "$aur_list" | grep -c .)
+    updates_pacman=$(echo "$pacman_list" | grep -c .)
+    # combine; filter empty lines that grep -c . would count
+    [[ -z "$aur_list" ]]    && updates_aur=0
+    [[ -z "$pacman_list" ]] && updates_pacman=0
     updates=$((updates_aur+updates_pacman))
+    all_packages=$(printf '%s\n%s' "$pacman_list" "$aur_list" | grep -v '^$')
     
 # Fedora
 elif [[ $(_checkCommandExists "dnf") == 0 ]]; then
-    updates=$(dnf check-update -q | grep -c ^[a-z0-9])
+    all_packages=$(dnf check-update -q 2>/dev/null | grep ^[a-z0-9] | awk '{print $1}')
+    updates=$(echo "$all_packages" | grep -c .)
+    [[ -z "$all_packages" ]] && updates=0
 # Others
 else
     updates=0
+    all_packages=""
 fi
 
 # ----------------------------------------------------- 
@@ -96,8 +105,10 @@ if [ "$updates" -gt $threshhold_red ]; then
 fi
 if [ "$updates" != 0 ]; then
     if [ "$updates" -gt $threshhold_green ]; then
-        printf '{"text": "%s", "alt": "%s", "tooltip": "Click to update your system", "class": "%s"}' "$updates" "$updates" "$css_class"
+        packages_json=$(echo "$all_packages" | jq -Rcs '[splits("\n") | select(. != "")]')
+        printf '{"text": "%s", "alt": "%s", "class": "%s", "packages": %s}' \
+            "$updates" "$updates" "$css_class" "$packages_json"
     else
-        printf '{"text": "0", "alt": "0", "tooltip": "No updates available", "class": "green"}'
+        printf '{"text": "0", "alt": "0", "class": "green", "packages": []}'
     fi
 fi

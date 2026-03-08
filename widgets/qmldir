@@ -1,6 +1,13 @@
 module widgets
+singleton Icons 1.0 Icons.qml
 Clock 1.0 Clock.qml
+TooltipContainer 1.0 TooltipContainer.qml
 IpWidget 1.0 IpWidget.qml
 MemoryWidget 1.0 MemoryWidget.qml
+BatteryWidget 1.0 BatteryWidget.qml
+IpEntry 1.0 IpEntry.qml
+NetworkWidget 1.0 NetworkWidget.qml
+PowerWidget 1.0 PowerWidget.qml
+SoundWidget 1.0 SoundWidget.qml
 UpdatesWidget 1.0 UpdatesWidget.qml
 Workspaces 1.0 Workspaces.qml
