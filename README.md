@@ -1,6 +1,6 @@
 # mybar
 
-A minimal Wayland status bar built with [Quickshell](https://quickshell.outfoxxed.me/) (QML). Designed as a Waybar replacement for Hyprland, with live theme switching driven by [theme-switch](https://github.com/jesusferm/theme-switch).
+A minimal Wayland status bar built with [Quickshell](https://quickshell.outfoxxed.me/) (QML). Designed as a Waybar replacement for Hyprland, with live theme switching driven by [theme-switch](https://github.com/technet99m/theme-switch).
 
 ## Features
 
@@ -41,7 +41,7 @@ All script paths are resolved relative to the QML files at runtime, so the proje
 
 ### Theme integration
 
-mybar reads colors from `~/.config/tc99m/current-theme`, the same file written by [theme-switch](https://github.com/jesusferm/theme-switch). Without it the bar still works — it falls back to a purple palette defined in `Theme.qml`.
+mybar reads colors from `~/.config/tc99m/current-theme`, the same file written by [theme-switch](https://github.com/technet99m/theme-switch). Without it the bar still works — it falls back to a purple palette defined in `Theme.qml`.
 
 To use live theming, install theme-switch and configure your themes there. mybar will pick up color changes instantly via file watching.
 
@@ -117,5 +117,5 @@ mybar/
 
 ## Related projects
 
-- [theme-switch](https://github.com/jesusferm/theme-switch) — Quickshell-based fullscreen theme picker that drives mybar's live color reloading
-- [quick-nm](https://github.com/jesusferm/quick-nm) — Quickshell NetworkManager frontend
+- [theme-switch](https://github.com/technet99m/theme-switch) — Quickshell-based fullscreen theme picker that drives mybar's live color reloading
+- [quick-nm](https://github.com/technet99m/quick-nm) — Quickshell NetworkManager frontend
