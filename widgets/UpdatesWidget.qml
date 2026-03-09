@@ -35,7 +35,7 @@ Item {
     Process {
         id: proc
         property string _buf: ""
-        command: ["bash", "-c", "$HOME/dev/rice/mybar/scripts/check-updates.sh"]
+        command: ["bash", Qt.resolvedUrl("../scripts/check-updates.sh").toString().replace("file://", "")]
         stdout: SplitParser {
             onRead: function(data) { proc._buf += data }
         }
@@ -54,7 +54,7 @@ Item {
 
     Process {
         id: installer
-        command: ["bash", "-c", "~/.config/ml4w/settings/installupdates.sh"]
+        command: ["kitty", "--", "yay"]
         onRunningChanged: if (!running) refresh()
     }
 

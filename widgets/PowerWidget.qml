@@ -54,6 +54,6 @@ Item {
         }
     }
 
-    Process { id: wlogoutProc;  command: ["bash", "-c", "~/.config/ml4w/scripts/ml4w-wlogout"] }
+    Process { id: wlogoutProc;  command: ["bash", Qt.resolvedUrl("../scripts/wlogout.sh").toString().replace("file://", "")] }
     Process { id: hyprlockProc; command: ["hyprlock"] }
 }

@@ -40,7 +40,7 @@ Item {
     Process {
         id: proc
         property string _buf: ""
-        command: ["bash", "-c", "$HOME/dev/rice/mybar/scripts/battery-status.sh"]
+        command: ["bash", Qt.resolvedUrl("../scripts/battery-status.sh").toString().replace("file://", "")]
         stdout: SplitParser {
             onRead: function(data) { proc._buf += data }
         }

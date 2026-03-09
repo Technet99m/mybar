@@ -16,7 +16,7 @@ Item {
     // ── Main usage (display text) ─────────────────────────────────────────────
     Process {
         id: proc
-        command: ["bash", "-c", "$HOME/dev/rice/mybar/scripts/memory.sh"]
+        command: ["bash", Qt.resolvedUrl("../scripts/memory.sh").toString().replace("file://", "")]
         stdout: SplitParser {
             onRead: function(data) {
                 try { _value = JSON.parse(data.trim()).text ?? "..." } catch(e) {}
@@ -34,7 +34,7 @@ Item {
     // ── Top-processes (tooltip data) ──────────────────────────────────────────
     Process {
         id: procTop
-        command: ["bash", "-c", "$HOME/dev/rice/mybar/scripts/memory-top.sh"]
+        command: ["bash", Qt.resolvedUrl("../scripts/memory-top.sh").toString().replace("file://", "")]
         stdout: SplitParser {
             onRead: function(data) {
                 try { _procs = JSON.parse(data.trim()) } catch(e) {}

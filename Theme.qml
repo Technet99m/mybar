@@ -26,7 +26,7 @@ QtObject {
     readonly property Process _reader: Process {
         command: [
             "bash", "-c",
-            ". \"$(cat $HOME/.config/ml4w/settings/current-theme)\" 2>/dev/null"
+            ". \"$(cat $HOME/.config/tc99m/current-theme)\" 2>/dev/null"
             + " && echo \"$foreground_hex $background_hex $accent_hex\""
         ]
         stdout: SplitParser {
@@ -44,7 +44,7 @@ QtObject {
     // Re-run whenever apply.sh writes a new theme path to the pointer file
     readonly property FileView _watcher: FileView {
         path: StandardPaths.writableLocation(StandardPaths.HomeLocation)
-              + "/.config/ml4w/settings/current-theme"
+              + "/.config/tc99m/current-theme"
         watchChanges: true
         onTextChanged: root.reload()
     }

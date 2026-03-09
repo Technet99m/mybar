@@ -29,7 +29,7 @@ Item {
     Process {
         id: proc
         property string _buf: ""
-        command: ["bash", "-c", "$HOME/dev/rice/mybar/scripts/localip.sh"]
+        command: ["bash", Qt.resolvedUrl("../scripts/localip.sh").toString().replace("file://", "")]
         stdout: SplitParser {
             onRead: function(data) { proc._buf += data }
         }

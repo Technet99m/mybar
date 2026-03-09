@@ -40,7 +40,7 @@ Item {
     Process {
         id: soundProc
         property string _buf: ""
-        command: ["bash", "-c", "$HOME/dev/rice/mybar/scripts/sound-status.sh"]
+        command: ["bash", Qt.resolvedUrl("../scripts/sound-status.sh").toString().replace("file://", "")]
         stdout: SplitParser {
             onRead: function(data) { soundProc._buf += data }
         }
@@ -67,7 +67,7 @@ Item {
     Process {
         id: btProc
         property string _buf: ""
-        command: ["bash", "-c", "$HOME/dev/rice/mybar/scripts/bluetooth-status.sh"]
+        command: ["bash", Qt.resolvedUrl("../scripts/bluetooth-status.sh").toString().replace("file://", "")]
         stdout: SplitParser {
             onRead: function(data) { btProc._buf += data }
         }
@@ -238,5 +238,5 @@ Item {
     }
 
     Process { id: pavucontrolProc; command: ["pavucontrol"] }
-    Process { id: btManagerProc;   command: ["bash", "-c", "~/.config/ml4w/settings/bluetooth.sh"] }
+    Process { id: btManagerProc;   command: ["blueman-manager"] }
 }

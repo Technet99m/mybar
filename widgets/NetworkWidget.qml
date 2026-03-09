@@ -35,7 +35,7 @@ Item {
     Process {
         id: proc
         property string _buf: ""
-        command: ["bash", "-c", "$HOME/dev/rice/mybar/scripts/network-status.sh"]
+        command: ["bash", Qt.resolvedUrl("../scripts/network-status.sh").toString().replace("file://", "")]
         stdout: SplitParser {
             onRead: function(data) { proc._buf += data }
         }
@@ -139,5 +139,10 @@ Item {
         onClicked:    nmProc.running = true
     }
 
-    Process { id: nmProc; command: ["bash", "-c", "~/.config/ml4w/settings/networkmanager.sh"] }
+    Process {
+        id: nmProc
+        command: ["bash", "-c",
+            "f=$HOME/.config/tc99m/quick-nm.sh; " +
+            "if [ -x \"$f\" ]; then bash \"$f\"; else nm-connection-editor; fi"]
+    }
 }
