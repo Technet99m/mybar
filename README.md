@@ -58,17 +58,17 @@ yay -S ttf-firacode-nerd
 ## Usage
 
 ```bash
-# Launch
-quickshell -p ~/dev/rice/mybar
+# Launch (from the cloned directory)
+quickshell -p .
 
 # Or use the helper script (kills any running instance first)
-bash ~/dev/rice/mybar/launch.sh
+bash launch.sh
 ```
 
-To autostart with Hyprland, add to `hyprland.conf`:
+To autostart with Hyprland, add to `hyprland.conf` (adjust path to where you cloned):
 
 ```
-exec-once = bash ~/dev/rice/mybar/launch.sh
+exec-once = bash ~/mybar/launch.sh
 ```
 
 ## Defaults and customization
