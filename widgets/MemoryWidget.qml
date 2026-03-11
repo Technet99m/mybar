@@ -13,13 +13,15 @@ Item {
     property string _value: "..."
     property var    _procs: []
 
+    readonly property real _maxPct: _procs.length > 0 ? Math.max(..._procs.map(p => p.pct)) : 1
+
     // ── Main usage (display text) ─────────────────────────────────────────────
     Process {
         id: proc
         command: ["bash", Qt.resolvedUrl("../scripts/memory.sh").toString().replace("file://", "")]
         stdout: SplitParser {
             onRead: function(data) {
-                try { _value = JSON.parse(data.trim()).text ?? "..." } catch(e) {}
+                try { _value = JSON.parse(data.trim()).text ?? "..." } catch(e) { _value = "..." }
             }
         }
     }
@@ -29,7 +31,7 @@ Item {
         onTriggered: proc.running = true
     }
 
-    Component.onCompleted: proc.running = true
+    Component.onCompleted: { proc.running = true; procTop.running = true }
 
     // ── Top-processes (tooltip data) ──────────────────────────────────────────
     Process {
@@ -37,7 +39,7 @@ Item {
         command: ["bash", Qt.resolvedUrl("../scripts/memory-top.sh").toString().replace("file://", "")]
         stdout: SplitParser {
             onRead: function(data) {
-                try { _procs = JSON.parse(data.trim()) } catch(e) {}
+                try { _procs = JSON.parse(data.trim()) } catch(e) { _procs = [] }
             }
         }
     }
@@ -89,13 +91,13 @@ Item {
 
 
         Column {
-            width:   240
+            width:   260
             spacing: 6
 
             // Header
             Text {
                 width:          parent.width
-                text:           "Top processes"
+                text:           "Top process groups"
                 font.family:    "Fira Sans"
                 font.pixelSize: 11
                 font.weight:    Font.DemiBold
@@ -134,8 +136,8 @@ Item {
                         color:  theme.a(theme.primary, 0.15)
 
                         Rectangle {
-                            // cap at 100% using 30% RAM as "full bar"
-                            width:  Math.round(parent.width * Math.min(modelData.pct / 30, 1))
+                            // scale relative to the top consumer in the list
+                            width:  Math.round(parent.width * Math.min(modelData.pct / root._maxPct, 1))
                             height: parent.height
                             radius: parent.radius
                             color:  theme.a(theme.primary, 0.7)

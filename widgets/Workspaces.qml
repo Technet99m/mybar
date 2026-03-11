@@ -1,5 +1,5 @@
 // Workspaces.qml
-// Shows 5 persistent workspace indicators on the left side of the bar.
+// Shows 10 persistent workspace indicators on the left side of the bar.
 // - Active workspace is highlighted with the theme primary color
 // - Occupied workspaces show their number at full opacity
 // - Empty workspaces show their number dimmed

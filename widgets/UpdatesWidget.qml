@@ -107,12 +107,16 @@ Item {
     }
 
     MouseArea {
-        anchors.fill: parent
-        cursorShape:  Qt.PointingHandCursor
-        hoverEnabled: true
-        onClicked:    installer.running = true
-        onEntered:    tip.show()
-        onExited:     tip.hide()
+        anchors.fill:    parent
+        cursorShape:     Qt.PointingHandCursor
+        hoverEnabled:    true
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        onClicked: function(mouse) {
+            if (mouse.button === Qt.RightButton) root.refresh()
+            else installer.running = true
+        }
+        onEntered: tip.show()
+        onExited:  tip.hide()
     }
 
     TooltipContainer {

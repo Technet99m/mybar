@@ -29,11 +29,12 @@ Item {
     readonly property color _micColor:
         _micMuted ? theme.accent : theme.a(theme.primary, 0.90)
 
-    readonly property color _btColor: {
-        if (_btActive)                 return theme.accent
-        if (_btStatus === "connected") return theme.a(theme.primary, 0.85)
-        if (_btStatus === "on")        return theme.a(theme.primary, 0.45)
-        return                                theme.a(theme.primary, 0.20) // off — very dim
+    readonly property color _btColor:    _btActive ? theme.accent : theme.a(theme.primary, 0.85)
+    readonly property real  _btOpacity: {
+        if (_btActive)                 return 1.0
+        if (_btStatus === "connected") return 0.85
+        if (_btStatus === "on")        return 0.45
+        return                                0.20  // off — very dim
     }
 
     // ── Sound polling (1 s) ───────────────────────────────────────────────
@@ -206,15 +207,13 @@ Item {
 
                 Text {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: {
-                        if (root._btActive)                 return Icons.headphone
-                        if (root._btStatus === "connected") return Icons.bluetooth
-                        return Icons.bluetooth
-                    }
+                    text:           root._btActive ? Icons.headphone : Icons.bluetooth
                     font.family:    "FiraCode Nerd Font Mono"
                     font.pixelSize: Icons.bluetoothSize
                     color:          root._btColor
-                    Behavior on color { ColorAnimation { duration: 200 } }
+                    opacity:        root._btOpacity
+                    Behavior on color   { ColorAnimation  { duration: 200 } }
+                    Behavior on opacity { NumberAnimation { duration: 200 } }
                 }
 
                 // "off" label — only shown when adapter is off

@@ -64,7 +64,7 @@ PopupWindow {
 
         // Cancel pending hide when mouse enters the tooltip window
         HoverHandler {
-            onHoveredChanged: if (hovered) hideDelay.stop(); else hideDelay.restart()
+            onHoveredChanged: if (hovered) root.show(); else hideDelay.restart()
         }
         anchors.fill: parent
         opacity: 0

@@ -34,7 +34,7 @@ Item {
             onRead: function(data) { proc._buf += data }
         }
         onRunningChanged: {
-            if (running) return
+            if (running) { _buf = ""; return }
             if (_buf === "") return
             try {
                 const j   = JSON.parse(_buf.trim())
@@ -42,7 +42,12 @@ Item {
                 root._wg   = j.wg   ?? "0.0.0.0"
                 root._wlan = j.wlan ?? "0.0.0.0"
                 root._vpn  = j.vpn  ?? false
-            } catch(e) {}
+            } catch(e) {
+                root._lan  = "0.0.0.0"
+                root._wg   = "0.0.0.0"
+                root._wlan = "0.0.0.0"
+                root._vpn  = false
+            }
             _buf = ""
         }
     }
