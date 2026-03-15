@@ -1,10 +1,10 @@
 # mybar
 
-A minimal Wayland status bar built with [Quickshell](https://quickshell.outfoxxed.me/) (QML). Designed as a Waybar replacement for Hyprland, with live theme switching driven by [theme-switch](https://github.com/technet99m/theme-switch).
+A minimal but opinionated Wayland status bar built with [Quickshell](https://quickshell.outfoxxed.me/) (QML). Designed as a Waybar replacement for Hyprland, with live theme switching driven by [theme-switch](https://github.com/technet99m/theme-switch).
 
 ## Features
 
-- **Workspaces** — 5 persistent Hyprland workspace buttons per screen
+- **Workspaces** — 10 persistent Hyprland workspace buttons per screen
 - **Clock** — current time and date
 - **IP widget** — primary IP address with LAN / WireGuard / WLAN breakdown on hover
 - **Memory** — used / total RAM with tooltip
