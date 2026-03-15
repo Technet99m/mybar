@@ -148,6 +148,7 @@ Item {
                         property bool isEmpty: index < calTip._fd || day > calTip._dim
                         property bool isToday: {
                             if (isEmpty) return false
+                            root._now  // reactive dependency — re-evaluates every second
                             var n = new Date()
                             return day === n.getDate()
                                 && calTip.calMonth === n.getMonth()
