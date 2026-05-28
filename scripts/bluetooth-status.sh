@@ -4,7 +4,7 @@
 # active=true when the default sink is a bluetooth device.
 
 # Count bluez audio sinks registered in PipeWire/PulseAudio
-bt_sinks=$(pactl list sinks short 2>/dev/null | grep -c "bluez_output" || echo 0)
+bt_sinks=$(pactl list sinks short 2>/dev/null | grep -c "bluez_output")
 
 if [ "$bt_sinks" -gt 0 ]; then
     default_sink=$(pactl get-default-sink 2>/dev/null)
