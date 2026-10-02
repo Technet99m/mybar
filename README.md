@@ -27,17 +27,27 @@ A minimal but opinionated Wayland status bar built with [Quickshell](https://qui
 | `checkupdates` (`pacman-contrib`) | Arch update checking |
 | yay or paru | AUR update checking (optional) |
 | hyprlock | Lock screen (right-click power button) |
-| wlogout | Power menu (left-click power button) |
+| wlogout (AUR) | Power menu (left-click power button) |
+| `jq`, `python3` | JSON for updates / power menu, per-process memory tooltip |
+| pavucontrol, blueman, kitty | Click actions (volume, bluetooth, updates) |
 | FiraCode Nerd Font Mono | Icon glyphs |
 | Fira Sans | Label text |
+
+## Quick setup (fresh Arch machine)
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/Technet99m/mybar/master/bootstrap.sh)
+```
+
+`bootstrap.sh` installs the missing dependencies (pacman, plus AUR ones via yay/paru if available), clones mybar, [quick-nm](https://github.com/technet99m/quick-nm) and [theme-switch](https://github.com/technet99m/theme-switch) side by side into `~/dev/rice` (override with `RICE_DIR`), links quick-nm into `~/.config/tc99m/`, applies a theme and prints the Hyprland lines to add if your config doesn't start the rice yet. It is safe to re-run; run `./bootstrap.sh` from an existing checkout to set up its siblings. Use `RICE_GIT=git@github.com:Technet99m` to clone over SSH and `NO_DEPS=1` to skip package installation.
 
 ## Installation
 
 ```bash
-git clone https://github.com/jesusferm/mybar ~/mybar
+git clone https://github.com/Technet99m/mybar ~/dev/rice/mybar
 ```
 
-All script paths are resolved relative to the QML files at runtime, so the project works from any directory.
+All script paths are resolved relative to the QML files at runtime, so the project works from any directory. theme-switch expects mybar to be cloned next to it (it restarts the bar via `../mybar/launch.sh`).
 
 ### Theme integration
 
@@ -68,8 +78,10 @@ bash launch.sh
 To autostart with Hyprland, add to `hyprland.conf` (adjust path to where you cloned):
 
 ```
-exec-once = bash ~/mybar/launch.sh
+exec-once = bash ~/dev/rice/mybar/launch.sh
 ```
+
+With theme-switch installed, start `theme-switch/apply.sh` instead — it applies the saved theme and then starts mybar.
 
 ## Defaults and customization
 
@@ -77,7 +89,7 @@ exec-once = bash ~/mybar/launch.sh
 |--------|--------|---------|
 | NetworkWidget | click | `~/.config/tc99m/quick-nm.sh` if present, otherwise `nm-connection-editor` |
 | SoundWidget (BT section) | click | `blueman-manager` |
-| UpdatesWidget | click | `kitty -- yay` |
+| UpdatesWidget | click | `kitty -- yay` (falls back to paru, then `sudo pacman -Syu`) |
 | PowerWidget | left-click | `wlogout` (with margin calculated from monitor resolution) |
 | PowerWidget | right-click | `hyprlock` |
 
@@ -91,6 +103,7 @@ mybar/
 ├── Bar.qml                — PanelWindow (top-anchored, 36 px); wires up all widgets
 ├── Theme.qml              — Live color loader; watches ~/.config/tc99m/current-theme
 ├── launch.sh              — Helper: kills old instance and relaunches
+├── bootstrap.sh           — Fresh-machine setup for mybar + quick-nm + theme-switch
 ├── widgets/
 │   ├── qmldir             — QML module registry (add new widgets here)
 │   ├── Icons.qml          — Nerd Font codepoint constants
@@ -112,6 +125,8 @@ mybar/
     ├── check-updates.sh
     ├── localip.sh
     ├── bluetooth-status.sh
+    ├── memory-top.sh
+    ├── wlogout.sh
     └── vpn-status.sh
 ```
 
