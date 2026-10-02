@@ -54,7 +54,9 @@ Item {
 
     Process {
         id: installer
-        command: ["kitty", "--", "yay"]
+        // yay → paru → plain pacman, whichever is installed
+        command: ["bash", "-c",
+            "h=$(command -v yay || command -v paru) || h='sudo pacman -Syu'; exec kitty -- $h"]
         onRunningChanged: if (!running) refresh()
     }
 

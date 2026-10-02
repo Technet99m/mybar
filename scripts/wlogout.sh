@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
-res_h=$(hyprctl -j monitors | jq '.[] | select(.focused==true) | .height')
-h_scale=$(hyprctl -j monitors | jq '.[] | select (.focused == true) | .scale' | sed 's/\.//')
-w_margin=$((res_h * 27 / h_scale))
-wlogout -b 5 -T $w_margin -B $w_margin
+# Open wlogout with top/bottom margins of 27% of the focused monitor's
+# logical height (physical height / scale).
+w_margin=$(hyprctl -j monitors 2>/dev/null \
+    | jq -r '.[] | select(.focused == true) | (.height * 0.27 / .scale | floor)' 2>/dev/null)
+
+if [[ "$w_margin" =~ ^[0-9]+$ ]]; then
+    wlogout -b 5 -T "$w_margin" -B "$w_margin"
+else
+    wlogout -b 5
+fi
